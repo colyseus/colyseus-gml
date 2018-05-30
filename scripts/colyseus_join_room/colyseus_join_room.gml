@@ -1,14 +1,20 @@
 var join_room_name = argument[0];
 var options = json_decode( (argument_count > 1) ? argument[1] : "{}" );
 
-// ds_map_add(global.colyseus_rooms, room_name, );
+var request_id = global.colyseus_request_id++;
+ds_map_add(options, "requestId", request_id);
 
-var endpoint = argument0;
-var port = argument1;
+ds_map_add(global.colyseus_connecting_rooms, request_id, join_room_name);
 
-show_debug_message("colyseus_connect" + endpoint + ":" + string(port));
+//
+// build data structure for join request
+//
+var request_packet = ds_list_create();
+ds_list_add(request_packet, COLYSEUS_PROTOCOL.JOIN_ROOM);
+ds_list_add(request_packet, join_room_name);
 
-global.colyseus_client = network_create_socket(network_socket_tcp);
-network_set_config(network_config_use_non_blocking_socket, 1);
+var buffer = buffer_create(1, buffer_grow, 1);
+msgpack_encode(buffer, request_packet);
 
-network_connect_raw(global.colyseus_client, endpoint, port);
+show_debug_message("JOIN_ROOM request: " + join_room_name + " (" + json_encode(options) + ")");
+network_send_raw(global.colyseus_client, buffer, buffer_tell(buffer));

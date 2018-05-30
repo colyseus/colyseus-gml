@@ -2,14 +2,17 @@ var buff = argument0
 var scratch = argument1
 var ext_function = argument2
 
+// var pos = buffer_tell(buff);
+// show_debug_message("current offset: " + string(pos));
+
 // CONFIG
 var DECODE_BIN = false;
-
-buffer_seek(scratch, buffer_seek_start, 0);
 
 var cmd_ext = undefined;
 var cmd_size = undefined;
 var cmd = buffer_read(buff, buffer_u8);
+
+// show_debug_message("cmd: " + string(cmd));
 
 // Positive int class
 if(cmd & 0x80 == 0x00) {
@@ -25,15 +28,18 @@ if(cmd & 0xe0 == 0xe0) {
 if(cmd & 0xe0 == 0xa0) {
 	cmd_size = cmd & 0x1f;
 	cmd = 0xdb; // shunt decoding into str32 type for string decoding
+	// return msgpack_decode_array(buff, scratch, cmd & 0x0f);
 }
 else if(cmd & 0xf0 == 0x90) { // fixarray type
-	cmd_size = cmd & 0x0f;
-	cmd = 0xdd; // shunt decoding into array 32 type for array decoding
+	// cmd_size = cmd & 0x0f;
+	// cmd = 0xdd; // shunt decoding into array 32 type for array decoding
+	return msgpack_decode_array(buff, scratch, cmd & 0x0f);
 }
 else if(cmd & 0xf0 == 0x80) { // fixmap type
 	cmd_size = cmd & 0x0f;
 	cmd = 0xdf;
 }
+
 
 switch(cmd) {
 	// Nil family
@@ -41,24 +47,28 @@ switch(cmd) {
 		return undefined;
 
 	// Boolean family
-	case 0xc2: // false
+	case 0xc2:
 		return false;
-	case 0xc3: // true
+
+	case 0xc3:
 		return true;
 
 	// Int family
 	case 0xcc: // uint8
 		return buffer_read(buff, buffer_u8);
+
 	case 0xcd: // uint16, flip endianness
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_u16);
+		
 	case 0xce: // uint32,  flip endianness
 		buffer_poke(scratch, 3, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 2, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_u32);
+
 	case 0xcf: // uint64, flip endianness
 		buffer_poke(scratch, 7, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 6, buffer_u8, buffer_read(buff, buffer_u8));
@@ -69,18 +79,22 @@ switch(cmd) {
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_u64);
+
 	case 0xe0: // int8
 		return buffer_read(buff, buffer_s8);
+
 	case 0xd1: // int16, flip endianness
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_s16);
+
 	case 0xd2: // int32, flip endianness
 		buffer_poke(scratch, 3, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 2, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_s32);
+
 	case 0xd3: // int64, there's no s64 datatype, so we stack two s32s
 		buffer_poke(scratch, 7, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 6, buffer_u8, buffer_read(buff, buffer_u8));
@@ -101,6 +115,7 @@ switch(cmd) {
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_f32);
+
 	case 0xcb: // 64-bit double, flip endianness
 		buffer_poke(scratch, 7, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 6, buffer_u8, buffer_read(buff, buffer_u8));
@@ -156,19 +171,19 @@ switch(cmd) {
 			cmd_size = buffer_read(scratch, buffer_u32);
 		}
 
-		var ret_list = ds_list_create();
-		for(var i=0; i<cmd_size; i++) {
-			var peek_command = buffer_peek(buff, buffer_tell(buff), buffer_u8); // grab next command for marking
+		//var ret_list = ds_list_create();
+		//for(var i=0; i<cmd_size; i++) {
+			// var peek_command = buffer_peek(buff, buffer_tell(buff), buffer_u8); // grab next command for marking
 			var retval = msgpack_decode_sys(buff, scratch, ext_function)
-			ds_list_add(ret_list, retval);
-			if(peek_command & 0xf0 == 0x90 or peek_command == 0xdc or peek_command == 0xdd) { // command was a list
-				ds_list_mark_as_list(ret_list, i);
-			}
-			else if(peek_command & 0xf0 == 0x80 or peek_command = 0xde or peek_command == 0xdf) { // command was a map
-				ds_list_mark_as_map(ret_list, i);
-			}
-		}
-		return ret_list;
+			//ds_list_add(ret_list, retval);
+			//if(peek_command & 0xf0 == 0x90 or peek_command == 0xdc or peek_command == 0xdd) { // command was a list
+			//	ds_list_mark_as_list(ret_list, i);
+			//}
+			//else if(peek_command & 0xf0 == 0x80 or peek_command = 0xde or peek_command == 0xdf) { // command was a map
+			//	ds_list_mark_as_map(ret_list, i);
+			//}
+		//}
+		return retval;
 
 	// Map family
 	case 0xde: // map with 16-bit objects
