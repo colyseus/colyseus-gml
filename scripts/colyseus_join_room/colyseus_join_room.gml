@@ -13,6 +13,7 @@ var request_packet = ds_list_create();
 ds_list_add(request_packet, COLYSEUS_PROTOCOL.JOIN_ROOM);
 ds_list_add(request_packet, join_room_name);
 ds_list_add(request_packet, options);
+ds_list_mark_as_map(request_packet, 2);
 
 var buffer = buffer_create(1, buffer_grow, 1);
 msgpack_encode(buffer, request_packet);
