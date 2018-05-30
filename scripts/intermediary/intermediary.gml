@@ -11,8 +11,9 @@ switch (async_load[?"type"]) {
 		show_debug_message("DISCONNECTED from the TCP server.");
 		break;
 	case network_type_data:
+		show_debug_message("RECEIVED network_type_data: (size: " + string(async_load[?"size"]) + ")");
+
 		var buff = async_load[?"buffer"];
-		// var size = async_load[?"size"];
 		var data = msgpack_decode(buff);
 
 		if (!colyseus_process_message(data))
