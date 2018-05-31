@@ -1,6 +1,8 @@
 var message = argument0;
 var processed = false;
 
+show_debug_message("ID? " + string(async_load[?"id"]));
+
 if (ds_exists(message, ds_type_list))
 {
 	show_debug_message("TYPE: DS_LIST");
@@ -16,6 +18,22 @@ if (ds_exists(message, ds_type_list))
 
 		case COLYSEUS_PROTOCOL.JOIN_ROOM:
 			show_debug_message("JOIN ROOM!");
+
+			var room_id = ds_list_find_value(message, 1);
+			var request_id = ds_list_find_value(message, 2);
+
+			var endpoint = global.colyseus_endpoint + "/" + room_id;
+			var socket = colyseus_create_connection(endpoint, global.colyseus_port);
+			show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket));
+			
+			// transfer options on "request_id" to "socket_id"
+			var join_options = ds_map_find_value(global.colyseus_connecting_rooms, request_id);
+			ds_map_delete(global.colyseus_connecting_rooms, request_id);
+			ds_map_add(global.colyseus_connecting_rooms, socket, join_options);
+
+			global.colyseus_room = socket;
+			ds_map_add(global.colyseus_rooms, socket, room_id);
+
 			break;
 			
 		case COLYSEUS_PROTOCOL.JOIN_ERROR:
