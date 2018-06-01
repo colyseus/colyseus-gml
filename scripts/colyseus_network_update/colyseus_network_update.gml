@@ -31,12 +31,20 @@ switch (async_load[?"type"]) {
 		break;
 	case network_type_data:
 		show_debug_message("RECEIVED network_type_data: (size: " + string(async_load[?"size"]) + ")");
-
 		var buff = async_load[?"buffer"];
-		var data = msgpack_decode(buff);
+		
+		var messages = msgpack_batch_decode(buff);
+		var num_messages = array_length_1d(messages);
 
-		if (!colyseus_process_message(data))
+		for (var i=0; i<num_messages; i++)
 		{
+			if (!colyseus_process_message(messages[@i]))
+			{
+			}
+
+			messages[@i] = undefined; // clean up array
 		}
+
+
 		break;
 }

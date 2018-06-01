@@ -571,6 +571,25 @@
             }
         },
         {
+            "Key": "bb755bab-17c0-4b4e-a419-a3fa6c2a6dbd",
+            "Value": {
+                "id": "78a9267f-2f87-40db-ad34-7511bc8665a1",
+                "modelName": "GMResourceInfo",
+                "mvc": "1.0",
+                "configDeltaFiles": [
+                    
+                ],
+                "configDeltas": [
+                    
+                ],
+                "resourceCreationConfigs": [
+                    "default"
+                ],
+                "resourcePath": "scripts\/msgpack_batch_decode\/msgpack_batch_decode.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "c8d12bf3-b6ca-42e0-a63a-00dfa77e5d6c",
             "Value": {
                 "id": "a7092009-514b-4c95-bb01-f9c82abaa315",
@@ -766,6 +785,7 @@
         "aadf79fa-28e9-4491-91df-e9adca8df6a3",
         "7ec2fd23-4473-4f9b-b20e-1683541bcf7e",
         "48f33a19-a13b-4f0b-976e-0510642fb46e",
+        "bb755bab-17c0-4b4e-a419-a3fa6c2a6dbd",
         "276e1138-b3e8-4b05-95eb-90eb2a8dfbea",
         "fae95a8d-a004-4b29-b1b7-4815fc2b7719",
         "b80f93fb-e12f-436a-be69-675fbb148953",
