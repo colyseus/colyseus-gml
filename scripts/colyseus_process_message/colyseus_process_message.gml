@@ -1,12 +1,11 @@
 var message = argument0;
 var processed = false;
 
-show_debug_message("ID? " + string(async_load[?"id"]));
+show_debug_message("DATA ON socket_id: " + string(async_load[?"id"]));
+show_debug_message("BUFFER SIZE " + string(async_load[?"size"]));
 
 if (ds_exists(message, ds_type_list))
 {
-	show_debug_message("TYPE: DS_LIST");
-
 	var length = ds_list_size(message);
 	var code = ds_list_find_value(message, 0);
 	
@@ -37,21 +36,27 @@ if (ds_exists(message, ds_type_list))
 			break;
 			
 		case COLYSEUS_PROTOCOL.JOIN_ERROR:
+			show_debug_message("JOIN_ERROR!");
 			break;
 		
 		case COLYSEUS_PROTOCOL.LEAVE_ROOM:
+			show_debug_message("LEAVE_ROOM!");
 			break;
 
 		case COLYSEUS_PROTOCOL.ROOM_DATA:
+			show_debug_message("ROOM_DATA!");
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE:
+			show_debug_message("ROOM_STATE!");
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE_PATCH:
+			show_debug_message("ROOM_STATE_PATCH!");
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_LIST:
+			show_debug_message("ROOM_LIST!");
 			break;
 	}
 			

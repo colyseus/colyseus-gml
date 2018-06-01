@@ -14,7 +14,8 @@ switch (async_load[?"type"]) {
 
 			// confirm JOIN_ROOM on the connection.
 			var join_packet = global.colyseus_connecting_rooms[?socket_id];
-			ds_list_add(join_packet, 1);
+			ds_list_set(join_packet, 1, global.colyseus_rooms[?socket_id]);
+			ds_list_add(join_packet, global.colyseus_id);
 
 			var buffer = buffer_create(1, buffer_grow, 1);
 			msgpack_encode(buffer, join_packet);
