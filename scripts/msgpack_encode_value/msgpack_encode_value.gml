@@ -20,7 +20,7 @@ switch(type) {
 	case "number":
 		// TODO: replace with binary checks instead
 		if(value == floor(value)) {
-			if(value > 0) {
+			if(value >= 0) {
 				if(value < 128) { // positive fixnum
 					buffer_write(buff, buffer_u8, value & 0x7f);
 				}

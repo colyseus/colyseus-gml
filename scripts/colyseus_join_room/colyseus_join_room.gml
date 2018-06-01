@@ -14,7 +14,8 @@ ds_list_add(request_packet, options);
 ds_list_mark_as_map(request_packet, 2);
 
 // store join options on request id
-ds_map_add(global.colyseus_connecting_rooms, request_id, request_packet);
+global.colyseus_connecting_rooms[?request_id] = request_packet;
+// ds_map_add_list(global.colyseus_connecting_rooms, request_id, );
 
 var buffer = buffer_create(1, buffer_grow, 1);
 msgpack_encode(buffer, request_packet);

@@ -22,17 +22,17 @@ if (ds_exists(message, ds_type_list))
 			var room_id = ds_list_find_value(message, 1);
 			var request_id = ds_list_find_value(message, 2);
 
-			var endpoint = global.colyseus_endpoint + "/" + room_id;
-			var socket = colyseus_create_connection(endpoint, global.colyseus_port);
-			show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket));
+			var socket_id = colyseus_create_connection(global.colyseus_endpoint, global.colyseus_port);
+			show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket_id));
 			
 			// transfer options on "request_id" to "socket_id"
-			var join_options = ds_map_find_value(global.colyseus_connecting_rooms, request_id);
+			
+			var join_options = global.colyseus_connecting_rooms[?request_id];
+			ds_map_add(global.colyseus_connecting_rooms, socket_id, join_options);
 			ds_map_delete(global.colyseus_connecting_rooms, request_id);
-			ds_map_add(global.colyseus_connecting_rooms, socket, join_options);
 
-			global.colyseus_room = socket;
-			ds_map_add(global.colyseus_rooms, socket, room_id);
+			global.colyseus_room = socket_id;
+			ds_map_add(global.colyseus_rooms, socket_id, room_id);
 
 			break;
 			
