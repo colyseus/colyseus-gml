@@ -4,6 +4,8 @@ var options = json_decode( (argument_count > 1) ? argument[1] : "{}" );
 var request_id = global.colyseus_request_id++;
 ds_map_add(options, "requestId", request_id);
 
+show_debug_message("SCRIPT: colyseus_join_room");
+
 //
 // build data structure for join request
 //

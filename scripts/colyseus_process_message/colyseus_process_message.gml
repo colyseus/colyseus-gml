@@ -1,9 +1,6 @@
 var message = argument0;
 var processed = false;
 
-show_debug_message("DATA ON socket_id: " + string(async_load[?"id"]));
-show_debug_message("BUFFER SIZE " + string(async_load[?"size"]));
-
 if (ds_exists(message, ds_type_list))
 {
 	var length = ds_list_size(message);
@@ -16,10 +13,16 @@ if (ds_exists(message, ds_type_list))
 			break;
 
 		case COLYSEUS_PROTOCOL.JOIN_ROOM:
+			global.count++;
 			show_debug_message("JOIN ROOM!");
 
 			var room_id = ds_list_find_value(message, 1);
 			var request_id = ds_list_find_value(message, 2);
+			
+			if (global.count == 3)
+			{
+				show_debug_message("GET OUTTA HERE");
+			}
 			
 			if (request_id != undefined)
 			{

@@ -2,17 +2,12 @@ var buff = argument0
 var scratch = argument1
 var ext_function = argument2
 
-// var pos = buffer_tell(buff);
-// show_debug_message("current offset: " + string(pos));
-
 // CONFIG
-var DECODE_BIN = false;
+var DECODE_BIN = true;
 
 var cmd_ext = undefined;
 var cmd_size = undefined;
 var cmd = buffer_read(buff, buffer_u8);
-
-// show_debug_message("cmd: " + string(cmd));
 
 // Positive int class
 if(cmd & 0x80 == 0x00) {

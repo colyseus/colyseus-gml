@@ -2,6 +2,8 @@
 /// @param endpoint:string
 /// @param port:int
 
+global.count = 0;
+
 //
 // connection
 //

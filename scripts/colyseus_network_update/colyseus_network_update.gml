@@ -1,5 +1,8 @@
 var socket_id = async_load[?"id"];
 
+show_debug_message("DATA ON socket_id: " + string(async_load[?"id"]));
+show_debug_message("BUFFER SIZE " + string(async_load[?"size"]));
+
 switch (async_load[?"type"]) {
 	case network_type_non_blocking_connect:
 		show_debug_message("NON BLOCKING CONNECTED into the TCP server.");
@@ -35,6 +38,8 @@ switch (async_load[?"type"]) {
 		
 		var messages = msgpack_batch_decode(buff);
 		var num_messages = array_length_1d(messages);
+		
+		show_debug_message("NUM_MESSAGES: " + string(num_messages));
 
 		for (var i=0; i<num_messages; i++)
 		{
@@ -44,7 +49,8 @@ switch (async_load[?"type"]) {
 
 			messages[@i] = undefined; // clean up array
 		}
-
+		
+		buffer_delete(buff);
 
 		break;
 }
