@@ -20,18 +20,25 @@ if (ds_exists(message, ds_type_list))
 
 			var room_id = ds_list_find_value(message, 1);
 			var request_id = ds_list_find_value(message, 2);
-
-			var socket_id = colyseus_create_connection(global.colyseus_endpoint, global.colyseus_port);
-			show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket_id));
 			
-			// transfer options on "request_id" to "socket_id"
+			if (request_id != undefined)
+			{
+				var socket_id = colyseus_create_connection(global.colyseus_endpoint, global.colyseus_port);
+				show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket_id));
 			
-			var join_options = global.colyseus_connecting_rooms[?request_id];
-			ds_map_add(global.colyseus_connecting_rooms, socket_id, join_options);
-			ds_map_delete(global.colyseus_connecting_rooms, request_id);
+				// transfer options on "request_id" to "socket_id"
+			
+				var join_options = global.colyseus_connecting_rooms[?request_id];
+				ds_map_add(global.colyseus_connecting_rooms, socket_id, join_options);
+				ds_map_delete(global.colyseus_connecting_rooms, request_id);
 
-			global.colyseus_room = socket_id;
-			ds_map_add(global.colyseus_rooms, socket_id, room_id);
+				global.colyseus_room = socket_id;
+				ds_map_add(global.colyseus_rooms, socket_id, room_id);
+				
+			} else 
+			{
+				show_debug_message("JOIN_ROOM CONFIRMED");
+			}
 
 			break;
 			
