@@ -2,8 +2,6 @@
 /// @param endpoint:string
 /// @param port:int
 
-global.count = 0;
-
 //
 // connection
 //
@@ -13,8 +11,10 @@ global.colyseus_port = argument1;
 global.colyseus_id = "";
 global.colyseus_request_id = 0;
 
-global.colyseus_rooms = ds_map_create();
 global.colyseus_connecting_rooms = ds_map_create();
+global.colyseus_rooms = ds_map_create();
+global.colyseus_rooms_state = ds_map_create();
+global.colyseus_rooms_encoded_state = ds_map_create();
 
 //
 // Protocol

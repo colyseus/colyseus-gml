@@ -13,8 +13,6 @@ switch (async_load[?"type"]) {
 			colyseus_join_room("chat");
 			
 		} else if (ds_map_exists(global.colyseus_rooms, socket_id)) {
-			show_debug_message("LETS EFFECTIVELY JOIN ON socket_id " + string(socket_id));
-
 			// confirm JOIN_ROOM on the connection.
 			var join_packet = global.colyseus_connecting_rooms[?socket_id];
 			ds_list_set(join_packet, 1, global.colyseus_rooms[?socket_id]);

@@ -9,28 +9,17 @@ if (ds_exists(message, ds_type_list))
 	switch (code) {
 		case COLYSEUS_PROTOCOL.USER_ID:
 			global.colyseus_id = ds_list_find_value(message, 1);
-			show_debug_message("COLYSEUS_ID: " + global.colyseus_id);
 			break;
 
 		case COLYSEUS_PROTOCOL.JOIN_ROOM:
-			global.count++;
-			show_debug_message("JOIN ROOM!");
-
 			var room_id = ds_list_find_value(message, 1);
 			var request_id = ds_list_find_value(message, 2);
-			
-			if (global.count == 3)
-			{
-				show_debug_message("GET OUTTA HERE");
-			}
 			
 			if (request_id != undefined)
 			{
 				var socket_id = colyseus_create_connection(global.colyseus_endpoint, global.colyseus_port);
-				show_debug_message("LETS CREATE CONNECTION with room, socket_id " + string(socket_id));
 			
 				// transfer options on "request_id" to "socket_id"
-			
 				var join_options = global.colyseus_connecting_rooms[?request_id];
 				ds_map_add(global.colyseus_connecting_rooms, socket_id, join_options);
 				ds_map_delete(global.colyseus_connecting_rooms, request_id);
@@ -40,6 +29,7 @@ if (ds_exists(message, ds_type_list))
 				
 			} else 
 			{
+				global.colyseus_session_id = room_id;
 				show_debug_message("JOIN_ROOM CONFIRMED");
 			}
 
@@ -58,7 +48,13 @@ if (ds_exists(message, ds_type_list))
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE:
-			show_debug_message("ROOM_STATE!");
+			var socket_id = async_load[?"id"];
+
+			var encoded_state = ds_list_find_value(message, 1);
+			ds_map_add(global.colyseus_rooms_encoded_state, socket_id, encoded_state);
+			
+			var state = msgpack_decode(encoded_state);
+			ds_map_add_map(global.colyseus_rooms_state, socket_id, state);
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE_PATCH:
