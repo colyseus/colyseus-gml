@@ -6,9 +6,12 @@ if (ds_exists(message, ds_type_list))
 	var length = ds_list_size(message);
 	var code = ds_list_find_value(message, 0);
 	
+	show_debug_message("code: " + string(code));
+	
 	switch (code) {
 		case COLYSEUS_PROTOCOL.USER_ID:
 			global.colyseus_id = ds_list_find_value(message, 1);
+			processed = true;
 			break;
 
 		case COLYSEUS_PROTOCOL.JOIN_ROOM:
@@ -32,19 +35,23 @@ if (ds_exists(message, ds_type_list))
 				global.colyseus_session_id = room_id;
 				show_debug_message("JOIN_ROOM CONFIRMED");
 			}
-
+			
+			processed = true;
 			break;
 			
 		case COLYSEUS_PROTOCOL.JOIN_ERROR:
 			show_debug_message("JOIN_ERROR!");
+			processed = true;
 			break;
 		
 		case COLYSEUS_PROTOCOL.LEAVE_ROOM:
 			show_debug_message("LEAVE_ROOM!");
+			processed = true;
 			break;
 
 		case COLYSEUS_PROTOCOL.ROOM_DATA:
 			show_debug_message("ROOM_DATA!");
+			processed = true;
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE:
@@ -55,17 +62,21 @@ if (ds_exists(message, ds_type_list))
 			
 			var state = msgpack_decode(encoded_state);
 			ds_map_add_map(global.colyseus_rooms_state, socket_id, state);
+			
+			processed = true;
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_STATE_PATCH:
 			show_debug_message("ROOM_STATE_PATCH!");
+			processed = true;
 			break;
 			
 		case COLYSEUS_PROTOCOL.ROOM_LIST:
 			show_debug_message("ROOM_LIST!");
+			processed = true;
 			break;
 	}
-			
+
 }
 
 return processed;

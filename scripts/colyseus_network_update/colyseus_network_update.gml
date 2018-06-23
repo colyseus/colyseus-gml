@@ -43,6 +43,7 @@ switch (async_load[?"type"]) {
 		{
 			if (!colyseus_process_message(messages[@i]))
 			{
+				show_debug_message("COULDN'T PROCESS MESSAGE");
 			}
 
 			messages[@i] = undefined; // clean up array
