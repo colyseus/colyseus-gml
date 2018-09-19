@@ -1,6 +1,7 @@
 /// @function colyseus_connect(endpoint: string, port: int)
-/// @param endpoint:string
-/// @param port:int
+/// @description connect with Colyseus Server
+/// @param {string} endpoint
+/// @param {int} port
 
 //
 // connection
@@ -35,7 +36,7 @@ enum COLYSEUS_PROTOCOL {
 	ROOM_LIST = 20,
 
 	// Generic messages (50~60)
-	BAD_REQUEST = 50,	
+	BAD_REQUEST = 50,
 }
 
 global.colyseus_client = colyseus_create_connection(global.colyseus_endpoint, global.colyseus_port);

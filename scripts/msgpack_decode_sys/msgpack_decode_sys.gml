@@ -1,6 +1,6 @@
-var buff = argument0
-var scratch = argument1
-var ext_function = argument2
+var buff = argument0;
+var scratch = argument1;
+var ext_function = argument2;
 
 // CONFIG
 var DECODE_BIN = true;
@@ -8,6 +8,8 @@ var DECODE_BIN = true;
 var cmd_ext = undefined;
 var cmd_size = undefined;
 var cmd = buffer_read(buff, buffer_u8);
+
+show_debug_message("CMD: " + string(cmd));
 
 // Positive int class
 if(cmd & 0x80 == 0x00) {
@@ -35,7 +37,6 @@ else if(cmd & 0xf0 == 0x80) { // fixmap type
 	cmd = 0xdf;
 }
 
-
 switch(cmd) {
 	// Nil family
 	case 0xc0:
@@ -50,14 +51,17 @@ switch(cmd) {
 
 	// Int family
 	case 0xcc: // uint8
+		show_debug_message("READ UINT8");
 		return buffer_read(buff, buffer_u8);
 
 	case 0xcd: // uint16, flip endianness
+		show_debug_message("READ UINT16");
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_u16);
-		
+
 	case 0xce: // uint32,  flip endianness
+		show_debug_message("READ UINT32");
 		buffer_poke(scratch, 3, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 2, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
@@ -65,6 +69,7 @@ switch(cmd) {
 		return buffer_read(scratch, buffer_u32);
 
 	case 0xcf: // uint64, flip endianness
+		show_debug_message("READ UINT64");
 		buffer_poke(scratch, 7, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 6, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 5, buffer_u8, buffer_read(buff, buffer_u8));
@@ -76,14 +81,17 @@ switch(cmd) {
 		return buffer_read(scratch, buffer_u64);
 
 	case 0xe0: // int8
+		show_debug_message("READ INT8");
 		return buffer_read(buff, buffer_s8);
 
 	case 0xd1: // int16, flip endianness
+		show_debug_message("READ INT16");
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 		return buffer_read(scratch, buffer_s16);
 
 	case 0xd2: // int32, flip endianness
+		show_debug_message("READ INT32");
 		buffer_poke(scratch, 3, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 2, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 1, buffer_u8, buffer_read(buff, buffer_u8));
@@ -91,6 +99,7 @@ switch(cmd) {
 		return buffer_read(scratch, buffer_s32);
 
 	case 0xd3: // int64, there's no s64 datatype, so we stack two s32s
+		show_debug_message("READ INT64");
 		buffer_poke(scratch, 7, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 6, buffer_u8, buffer_read(buff, buffer_u8));
 		buffer_poke(scratch, 5, buffer_u8, buffer_read(buff, buffer_u8));
@@ -165,20 +174,23 @@ switch(cmd) {
 			buffer_poke(scratch, 0, buffer_u8, buffer_read(buff, buffer_u8));
 			cmd_size = buffer_read(scratch, buffer_u32);
 		}
-
-		//var ret_list = ds_list_create();
-		//for(var i=0; i<cmd_size; i++) {
-			// var peek_command = buffer_peek(buff, buffer_tell(buff), buffer_u8); // grab next command for marking
+		
+		var ret_list = ds_list_create();
+		for(var i=0; i<cmd_size; i++) {
+			var peek_command = buffer_peek(buff, buffer_tell(buff), buffer_u8); // grab next command for marking
 			var retval = msgpack_decode_sys(buff, scratch, ext_function)
-			//ds_list_add(ret_list, retval);
-			//if(peek_command & 0xf0 == 0x90 or peek_command == 0xdc or peek_command == 0xdd) { // command was a list
-			//	ds_list_mark_as_list(ret_list, i);
-			//}
-			//else if(peek_command & 0xf0 == 0x80 or peek_command = 0xde or peek_command == 0xdf) { // command was a map
-			//	ds_list_mark_as_map(ret_list, i);
-			//}
-		//}
-		return retval;
+			ds_list_add(ret_list, retval);
+			if(peek_command & 0xf0 == 0x90 or peek_command == 0xdc or peek_command == 0xdd) { // command was a list
+				ds_list_mark_as_list(ret_list, i);
+			}
+			else if(peek_command & 0xf0 == 0x80 or peek_command = 0xde or peek_command == 0xdf) { // command was a map
+				ds_list_mark_as_map(ret_list, i);
+			}
+		}
+		return ret_list;
+		
+		// var retval = msgpack_decode_sys(buff, scratch, ext_function)
+		// return retval;
 
 	// Map family
 	case 0xde: // map with 16-bit objects
@@ -241,6 +253,7 @@ switch(cmd) {
 			cmd_size = buffer_read(scratch, buffer_u32);
 		}
 		if(DECODE_BIN) {
+			show_debug_message("DECODE_BIN AT WORK!");
 			var ret_buff = buffer_create(cmd_size, buffer_fixed, 1);
 			buffer_copy(buff, buffer_tell(buff), cmd_size, ret_buff, 0);
 			buffer_seek(buff, buffer_seek_relative, cmd_size); // advance the read pointer since copy doesn't do it

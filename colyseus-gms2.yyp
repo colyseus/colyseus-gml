@@ -115,6 +115,25 @@
             }
         },
         {
+            "Key": "19cb62c4-c5fc-4e40-968e-97ae4faff9e8",
+            "Value": {
+                "id": "066c27de-1c68-4b93-bba0-6e597cfac42f",
+                "modelName": "GMResourceInfo",
+                "mvc": "1.0",
+                "configDeltaFiles": [
+                    
+                ],
+                "configDeltas": [
+                    
+                ],
+                "resourceCreationConfigs": [
+                    "default"
+                ],
+                "resourcePath": "scripts\/fossil_delta_apply\/fossil_delta_apply.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "276e1138-b3e8-4b05-95eb-90eb2a8dfbea",
             "Value": {
                 "id": "1335e973-e073-4a2d-9beb-b8d59341e50e",
@@ -343,6 +362,25 @@
             }
         },
         {
+            "Key": "7abaeb5a-4a54-4da4-ab01-0db83aa4ee61",
+            "Value": {
+                "id": "d585364b-367f-49ef-a06e-0d68f5afb115",
+                "modelName": "GMResourceInfo",
+                "mvc": "1.0",
+                "configDeltaFiles": [
+                    
+                ],
+                "configDeltas": [
+                    
+                ],
+                "resourceCreationConfigs": [
+                    "default"
+                ],
+                "resourcePath": "views\/7abaeb5a-4a54-4da4-ab01-0db83aa4ee61.yy",
+                "resourceType": "GMFolder"
+            }
+        },
+        {
             "Key": "7e600d22-fe32-4e58-846f-7889a269f6ab",
             "Value": {
                 "id": "863bcdcb-51b5-44d1-b3c2-97fb2729e579",
@@ -397,6 +435,25 @@
                 ],
                 "resourcePath": "views\/872d4829-adda-4b83-b88b-3ccbe1e122a7.yy",
                 "resourceType": "GMFolder"
+            }
+        },
+        {
+            "Key": "8fef8abf-18ee-4523-9272-fe60285a0488",
+            "Value": {
+                "id": "0357f7fb-6971-403a-b4c0-797fa253f08b",
+                "modelName": "GMResourceInfo",
+                "mvc": "1.0",
+                "configDeltaFiles": [
+                    
+                ],
+                "configDeltas": [
+                    
+                ],
+                "resourceCreationConfigs": [
+                    "default"
+                ],
+                "resourcePath": "objects\/test\/test.yy",
+                "resourceType": "GMObject"
             }
         },
         {
@@ -571,6 +628,25 @@
             }
         },
         {
+            "Key": "b819ec26-8570-4af4-b486-c6e662197acc",
+            "Value": {
+                "id": "fe642196-81e6-445f-a35b-214672486da5",
+                "modelName": "GMResourceInfo",
+                "mvc": "1.0",
+                "configDeltaFiles": [
+                    
+                ],
+                "configDeltas": [
+                    
+                ],
+                "resourceCreationConfigs": [
+                    "default"
+                ],
+                "resourcePath": "scripts\/test_msgpack_decode\/test_msgpack_decode.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "bb755bab-17c0-4b4e-a419-a3fa6c2a6dbd",
             "Value": {
                 "id": "78a9267f-2f87-40db-ad34-7511bc8665a1",
@@ -604,7 +680,7 @@
                 "resourceCreationConfigs": [
                     "default"
                 ],
-                "resourcePath": "objects\/object0\/object0.yy",
+                "resourcePath": "objects\/Colyseus\/Colyseus.yy",
                 "resourceType": "GMObject"
             }
         },
@@ -791,11 +867,13 @@
         "b80f93fb-e12f-436a-be69-675fbb148953",
         "3cd1d5dc-dda6-496c-9e5f-ee30385e3307",
         "ea61fa40-30b5-45c9-946c-682017cd2190",
+        "19cb62c4-c5fc-4e40-968e-97ae4faff9e8",
         "b5ebf08b-aea7-4c7b-aba5-4084818decf2",
         "9d8b24ba-03a3-4a21-bd80-f0000802c64f",
         "985c9648-dfa6-4c2e-bb30-4b31141981a4",
         "678803a6-5634-41cd-ad40-a49cb6152e12",
-        "2ccbd962-3593-427d-a69a-f5f23ede45e4"
+        "2ccbd962-3593-427d-a69a-f5f23ede45e4",
+        "b819ec26-8570-4af4-b486-c6e662197acc"
     ],
     "tutorial": ""
 }
